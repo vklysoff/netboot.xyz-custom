@@ -9,6 +9,9 @@ set ipparam BOOTIF=${netX/mac} ${ipparam}
 goto ${menu} ||
 
 :menu_auto_debian
+iseq ${os_arch} x86_64 && set os_arch amd64 ||
+iseq ${os_arch} i386 && set os_arch i386 ||
+iseq ${os_arch} arm64 && set os_arch arm64 ||
 menu Oracle Family
 item --gap Target
 item bookworm ${space} Debian GNU/Linux 12 (bookworm)
