@@ -5,6 +5,10 @@ clear custom_choice
 menu Это моё
 item --gap Automatron:
 iseq ${menu_auto} 1 && item auto ${space} Seek & Destroy ||
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
+goto custom_exit
 
 :auto
 chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/my_auto.ipxe || goto error
