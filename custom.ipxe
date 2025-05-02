@@ -10,10 +10,14 @@ echo ${cls}
 goto ${custom_choice}
 goto custom_exit
 
-#:auto
-#chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/my_auto.ipxe || goto error
-#goto main_menu
-#
-#:custom_exit
-#chain utils.ipxe
-#exit
+:auto
+chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/my_auto.ipxe || goto error
+
+:custom_exit
+chain utils.ipxe
+exit
+
+:error
+echo Error occurred, press any key to return to menu ...
+prompt
+goto custom
