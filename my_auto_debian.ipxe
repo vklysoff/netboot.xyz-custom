@@ -28,8 +28,8 @@ goto menu_auto_debian
 :bookworm
 set os_arch amd64
 set debian_version ${menu}
-set dir ${debian_base_dir}/dists/${debian_version}/main/installer-${os_arch}/current/images/netboot/
-set dir ${dir}${menu}-installer/${os_arch}
+set dir ${debian_base_dir}/dists/${debian_version}/main/installer-amd64/current/images/netboot/
+set dir ${dir}${menu}-installer/amd64
 goto deb_boot
 
 :deb_boot
