@@ -13,7 +13,7 @@ menu Oracle Family
 item --gap Target
 item bookworm ${space} Debian GNU/Linux 12 (bookworm)
 item --gap Setup
-item preseed ${space} Preseed URL: ${preseed_url}
+item preseed ${space} Preseed URL: [${preseed_url}]
 choose menu || goto auto_exit
 goto ${menu}
 
@@ -25,7 +25,7 @@ iseq ${vnc_enabled} true && set opts_vnc inst.vnc ||
 iseq ${vnc_password_enabled} true && set opts_vnc inst.vnc inst.vncpassword=${vnc_password_str} ||
 goto boot
 
-:vnc_password_read
+:preseed
 echo -n Please enter your custom preseed URL here: ${} && read preseed_url
 goto auto_menu
 
