@@ -8,7 +8,7 @@ set ipparam BOOTIF=${netX/mac} ${ipparam}
 
 goto ${menu} ||
 
-:auto_menu
+:menu_auto_debian
 menu Oracle Family
 item --gap Target
 item bookworm ${space} Debian GNU/Linux 12 (bookworm)
@@ -27,7 +27,7 @@ goto boot
 
 :preseed
 echo -n Please enter your custom preseed URL here: ${} && read preseed_url
-goto auto_menu
+goto menu_auto_debian
 
 :boot
 imgfree

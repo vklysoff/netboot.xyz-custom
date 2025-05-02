@@ -5,7 +5,7 @@ set ipparam BOOTIF=${netX/mac} ${ipparam}
 
 goto ${menu} ||
 
-:auto_menu
+:menu_auto_oracle
 menu Oracle Family
 item --gap Target
 item ol8 ${space} Oracle Lenux 8
@@ -27,19 +27,19 @@ goto boot
 
 :debug
 iseq ${debug_enabled} true && set debug_enabled false || set debug_enabled true
-goto auto_menu
+goto menu_auto_oracle
 
 :vnc
 iseq ${vnc_enabled} true && set vnc_enabled false || set vnc_enabled true
-goto auto_menu
+goto menu_auto_oracle
 
 :vnc_password
 iseq ${vnc_password_enabled} true && set vnc_password_enabled false || set vnc_password_enabled true
-goto auto_menu
+goto menu_auto_oracle
 
 :vnc_password_read
 echo -n Please enter your custom VNC password here with length from 6 to 8: ${} && read vnc_password_str
-goto auto_menu
+goto menu_auto_oracle
 
 :boot
 imgfree

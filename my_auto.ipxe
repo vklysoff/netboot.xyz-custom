@@ -24,3 +24,4 @@ goto custom
 
 :menu
 chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/my_auto_${menu}.ipxe || goto error
+goto auto_menu
