@@ -2,7 +2,7 @@
 
 :custom
 clear custom_choice
-menu Это моё
+menu It's me! Mario!!!
 item --gap Automatron:
 iseq ${menu_auto} 1 && item auto ${space} Seek & Destroy ||
 choose custom_choice || goto custom_exit
