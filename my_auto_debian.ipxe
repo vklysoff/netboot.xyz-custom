@@ -23,6 +23,7 @@ set install_params auto=true priority=critical preseed/url=${preseed_url}
 goto menu_auto_debian
 
 :bookworm
+set debian_version ${menu}
 set dir ${debian_base_dir}/dists/${debian_version}/main/installer-${os_arch}/current/images/netboot/
 set dir ${dir}${menu}-installer/${os_arch}
 goto deb_boot
