@@ -22,7 +22,6 @@ goto ${menu}
 
 :preseed
 echo -n Please enter your custom preseed URL here: ${} && read preseed_url
-set install_params auto=true priority=critical preseed/url=${preseed_url}
 goto menu_auto_debian
 
 :bookworm
@@ -30,6 +29,8 @@ set os_arch amd64
 set debian_version ${menu}
 set dir ${debian_base_dir}/dists/${debian_version}/main/installer-amd64/current/images/netboot/
 set dir ${dir}${menu}-installer/amd64
+set install_params auto=true priority=critical preseed/url=${preseed_url}
+set mirrorcfg mirror/suite=${debian_version}
 goto deb_boot
 
 :deb_boot
