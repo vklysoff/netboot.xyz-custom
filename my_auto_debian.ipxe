@@ -17,23 +17,26 @@ item preseed ${space} Preseed URL: [${preseed_url}]
 choose menu || goto auto_exit
 goto ${menu}
 
-:ol8
-set url ${live_endpoint}/asset-mirror/releases/download/6-853a47d3/
-set repo https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/${os_arch}
-iseq ${debug_enabled} true && set opts_debug inst.debug ||
-iseq ${vnc_enabled} true && set opts_vnc inst.vnc ||
-iseq ${vnc_password_enabled} true && set opts_vnc inst.vnc inst.vncpassword=${vnc_password_str} ||
-goto boot
-
 :preseed
 echo -n Please enter your custom preseed URL here: ${} && read preseed_url
+set install_params auto=true priority=critical preseed/url=${preseed_url}
 goto menu_auto_debian
 
-:boot
+:bookworm
+set dir ${debian_base_dir}/dists/${debian_version}/main/installer-${os_arch}/current/images/netboot/
+set dir ${dir}${menu}-installer/${os_arch}
+goto deb_boot
+
+:deb_boot
 imgfree
-kernel ${url}vmlinuz ${ipparam} ${opts_debug} ${opts_vnc} inst.repo=${repo} root=live:${url}squashfs.img ro rd.live.image rd.lvm=0 rd.luks=0 rd.md=0 rd.dm=0 initrd=initrd.magic net.ifnames=0 inst.ks=${live_endpoint}/ks/anaconda-ks.cfg inst.resolution=1280x1024 ${cmdline}
-initrd ${url}initrd
+kernel ${debian_mirror}/${dir}/linux ${install_params} ${netcfg} ${mirrorcfg} initrd=initrd.magic ${cmdline}
+initrd ${debian_mirror}/${dir}/initrd.gz
+echo
+echo MD5sums:
+md5sum linux initrd.gz
 boot
+
+
 
 :auto_exit
 clear menu
