@@ -1,0 +1,40 @@
+#!ipxe
+
+set preseed_url http://${dhcp-server}:8480/ps/preseed.cfg
+
+isset ${dhcp-server} && set ipparam ip=dhcp || set ipparam ip=${ip}::${gateway}:${netmask}:::none nameserver=${dns}
+set ipparam BOOTIF=${netX/mac} ${ipparam}
+
+
+goto ${menu} ||
+
+:auto_menu
+menu Oracle Family
+item --gap Target
+item bookworm ${space} Debian GNU/Linux 12 (bookworm)
+item --gap Setup
+item preseed ${space} Preseed URL: ${preseed_url}
+choose menu || goto auto_exit
+goto ${menu}
+
+:ol8
+set url ${live_endpoint}/asset-mirror/releases/download/6-853a47d3/
+set repo https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/${os_arch}
+iseq ${debug_enabled} true && set opts_debug inst.debug ||
+iseq ${vnc_enabled} true && set opts_vnc inst.vnc ||
+iseq ${vnc_password_enabled} true && set opts_vnc inst.vnc inst.vncpassword=${vnc_password_str} ||
+goto boot
+
+:vnc_password_read
+echo -n Please enter your custom preseed URL here: ${} && read preseed_url
+goto auto_menu
+
+:boot
+imgfree
+kernel ${url}vmlinuz ${ipparam} ${opts_debug} ${opts_vnc} inst.repo=${repo} root=live:${url}squashfs.img ro rd.live.image rd.lvm=0 rd.luks=0 rd.md=0 rd.dm=0 initrd=initrd.magic net.ifnames=0 inst.ks=${live_endpoint}/ks/anaconda-ks.cfg inst.resolution=1280x1024 ${cmdline}
+initrd ${url}initrd
+boot
+
+:auto_exit
+clear menu
+exit 0

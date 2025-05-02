@@ -7,46 +7,20 @@ goto ${menu} ||
 
 :auto_menu
 menu Automatron
-item --gap Choose
-item ol8 ${space} Oracle Lenux 8
-item --gap Setup
-item debug ${space} Debug: ${debug_enabled}
-item vnc ${space} VNC enabled: ${vnc_enabled}
-iseq ${vnc_enabled} true && item vnc_password ${space} VNC password enabled: ${vnc_password_enabled} ||
-iseq ${vnc_password_enabled} true && item vnc_password_read ${space} VNC password: [${vnc_password_str}] ||
+item --gap Targets
+item debian ${space} Debian
+item oracle ${space} Oracle Family
 choose menu || goto auto_exit
-goto ${menu}
+goto menu
 
-:ol8
-set url ${live_endpoint}/asset-mirror/releases/download/6-853a47d3/
-set repo https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/${os_arch}
-iseq ${debug_enabled} true && set opts_debug inst.debug ||
-iseq ${vnc_enabled} true && set opts_vnc inst.vnc ||
-iseq ${vnc_password_enabled} true && set opts_vnc inst.vnc inst.vncpassword=${vnc_password_str} ||
-goto boot
-
-:debug
-iseq ${debug_enabled} true && set debug_enabled false || set debug_enabled true
-goto auto_menu
-
-:vnc
-iseq ${vnc_enabled} true && set vnc_enabled false || set vnc_enabled true
-goto auto_menu
-
-:vnc_password
-iseq ${vnc_password_enabled} true && set vnc_password_enabled false || set vnc_password_enabled true
-goto auto_menu
-
-:vnc_password_read
-echo -n Please enter your custom VNC password here with length from 6 to 8: ${} && read vnc_password_str
-goto auto_menu
-
-:boot
-imgfree
-kernel ${url}vmlinuz ${ipparam} ${opts_debug} ${opts_vnc} inst.repo=${repo} root=live:${url}squashfs.img ro rd.live.image rd.lvm=0 rd.luks=0 rd.md=0 rd.dm=0 initrd=initrd.magic net.ifnames=0 inst.ks=${live_endpoint}/ks/anaconda-ks.cfg inst.resolution=1280x1024 ${cmdline}
-initrd ${url}initrd
-boot
-
-:auto_exit
+:exit
 clear menu
 exit 0
+
+:error
+echo Error occurred, press any key to return to menu ...
+prompt
+goto custom
+
+:menu
+chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/my_auto_${menu}.ipxe || goto error
